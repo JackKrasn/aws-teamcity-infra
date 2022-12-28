@@ -153,7 +153,7 @@ aws s3 mb s3://teamcity-state-bucket --region us-east-2
 ### Enable versioning on the newly created bucket
 
 ```sh
-aws s3api put-bucket-versioning --bucket terra-state-bucket --versioning-configuration Status=Enabled
+aws s3api put-bucket-versioning --bucket teamcity-state-bucket --versioning-configuration Status=Enabled
 ```
 
 ## Creating Kubernetes cluster on AWS EKS and RDS on PostgreSQL
