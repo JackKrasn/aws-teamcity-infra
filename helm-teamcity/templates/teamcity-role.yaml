@@ -1,0 +1,15 @@
+{{- if .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app: {{ template "teamcity.name" . }}
+    version: {{ .Values.server.image.version }}
+    chart: {{ template "teamcity.chart" . }}
+    component: {{ template "teamcity.fullname" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ template "teamcity.fullname" . }}
+rules:
+{{ toYaml .Values.rbac.role.rules }}
+{{- end }}

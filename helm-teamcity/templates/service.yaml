@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "teamcity.fullname" . }}
+  labels:
+    app: {{ template "teamcity.name" . }}
+    version: {{ .Values.server.image.version }}
+    chart: {{ template "teamcity.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+{{- if .Values.service.annotations }}
+  annotations:
+{{-   range $key, $val := .Values.service.annotations }}
+{{      $key | indent 4 }}: {{ $val | quote }}
+{{-   end}}
+{{- end }}
+spec:
+  type: {{ .Values.service.type }}
+{{- if and .Values.service.loadBalancerIP (eq .Values.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+{{- end }}
+  ports:
+    - name: {{ template "teamcity.name" . }}-http
+      port: {{ .Values.service.port }}
+      protocol: TCP
+  selector:
+    app: {{ template "teamcity.name" . }}
+    # version: {{ .Values.server.image.version }}
+    release: {{ .Release.Name }}
