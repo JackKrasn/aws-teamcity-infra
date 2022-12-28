@@ -1,0 +1,9 @@
+.idea/
+.vscode/
+Chart.lock
+terraform.
+*.tfstate
+*.tfstate.backup
+*.tfvars
+.terraform
+tfplan
