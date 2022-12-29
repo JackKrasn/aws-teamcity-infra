@@ -14,91 +14,57 @@ Assuming you already have AWS account and [AWS CLI installed](https://docs.aws.a
 
 ### Deploying terraform
 
-#### terraform for OS X
+#### terraform for macOS
+
+First, install the Hashicorp tap
 
 ```sh
-curl -o terraform_0.11.7_darwin_amd64.zip \
-https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_darwin_amd64.zip
-
-unzip terraform_0.11.7_linux_amd64.zip -d /usr/local/bin/
+brew tap hashicorp/tap
 ```
 
-#### terraform for Linux
+Now, install Terraform with hashicorp/tap/terraform
 
 ```sh
-curl https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip > \
-terraform_0.11.7_linux_amd64.zip
-
-unzip terraform_0.11.7_linux_amd64.zip -d /usr/local/bin/
+brew install hashicorp
 ```
 
-#### terraform installation verification
-
-Verify terraform version 0.11.7 or higher is installed:
-
-```sh
-terraform version
-```
+[How to install terraform on another platforms](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform)
 
 ### Deploying kubectl
 
-#### kubectl for OS X
+#### kubectl for macOS
 
 ```sh
-curl -o kubectl https://storage.googleapis.com/kubernetes-release/release/v1.11.0/bin/darwin/amd64/kubectl
-
-chmod +x kubectl
-
-sudo mv kubectl /usr/local/bin/
+brew install kubectl
 ```
 
-#### kubectl for Linux
-
-```sh
-wget https://storage.googleapis.com/kubernetes-release/release/v1.11.0/bin/linux/amd64/kubectl
-
-chmod +x kubectl
-
-sudo mv kubectl /usr/local/bin/
-```
-
-#### kubectl installation verification
+Test to ensure the version you installed is up-to-date:
 
 ```sh
 kubectl version --client
 ```
 
+[Install and Set UP kubectl on another platforms](https://kubernetes.io/docs/tasks/tools/)
+
 ### Deploying aws-iam-authenticator
 
 [aws-iam-authenticator](https://github.com/kubernetes-sigs/aws-iam-authenticator) is a tool developed by [Heptio](https://heptio.com/) Team and this tool will allow us to manage EKS by using kubectl
 
-#### aws-iam-authenticator for OS X
+#### aws-iam-authenticator for macOS
+
+Install the aws-iam-authenticator with the following command.
 
 ```sh
-curl -o aws-iam-authenticator \
-https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/darwin/amd64/aws-iam-authenticator
-
-chmod +x ./aws-iam-authenticator
-
-cp ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator && export PATH=$HOME/bin:$PATH
+brew install aws-iam-authenticator
 ```
 
-#### aws-iam-authenticator for Linux
-
-```sh
-curl -o aws-iam-authenticator \
-https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator
-
-chmod +x ./aws-iam-authenticator
-
-cp ./aws-iam-authenticator $HOME/.local/bin/aws-iam-authenticator && export PATH=$HOME/bin:$PATH
-```
-
-#### aws-iam-authenticator installation verification
+Test that the aws-iam-authenticator binary works
 
 ```sh
 aws-iam-authenticator help
 ```
+
+[Installing aws-iam-authenticator on another platforms](https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html)
 
 ### Authenticate to AWS
 
@@ -158,7 +124,7 @@ aws s3api put-bucket-versioning --bucket teamcity-state-bucket --versioning-conf
 
 ## Creating Kubernetes cluster on AWS EKS and RDS on PostgreSQL
 
-Now we can move into creating new infrastructure, eks and rds with terraform
+Now we can move into creating new infrastructure, eks, rds, teamcity, s3 storage and TeamCity with terraform
 
 I will use terraform modules to keep my code clean and organized
 
@@ -167,10 +133,11 @@ Terraform modules will create
 * VPC
 * EKS cluster
 * RDS with PostgreSQL
-* Namespace for TeamCity Server ang Agents
+* Kubernetes Namespace for TeamCity Server ang Agents
 * TeamCity Server and 2 TeamCity Agents
-* ALB controller
-* S3 Storage for storing artifacts.(Persistent Storage for pods)
+* AWS Load Balancer Controller
+* S3 Storage (Persistent Storage for pods)
+* [Dataset Operator](https://github.com/datashim-io/datashim)
 
 #### Initialize and pull terraform cloud specific dependencies
 
@@ -209,4 +176,11 @@ Run the following command to retrieve the access credentials for your cluster an
 ```sh
  aws eks --region $(terraform output -raw region) update-kubeconfig \
     --name $(terraform output -raw cluster_name)
+```
+
+#### Set Up RDS PostgreSQL for TeamcityServer
+
+TODO:not forget
+```sh
+
 ```
