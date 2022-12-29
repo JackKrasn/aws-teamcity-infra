@@ -89,23 +89,21 @@ server:
 
 service:
   name: teamcity
-  type: ClusterIP
-  loadBalancerIP:
+  type: NodePort
   port: 8111
   annotations: {}
 
 ingress:
-  enabled: false
-  defaultBackend:
-    enabled: true
+  enabled: true
   annotations:
   # kubernetes.io/ingress.class: nginx
   # kubernetes.io/tls-acme: "true"
   # nginx.ingress.kubernetes.io/proxy-body-size: 2000m
   # nginx.com/health-checks: "true"
-  path: /*
-  hosts: []
-  tls: []
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: instance
+  path: /
   # Put here any labels you'd like to see in the ingress configuration:
   labels:
 
