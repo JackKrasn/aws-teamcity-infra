@@ -6,9 +6,9 @@ metadata:
 spec:
   local:
     type: "COS"
-    accessKeyID: "AKIARE4BAT2XIIDXBCME"
-    secretAccessKey: "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"
+    accessKeyID: <ACCESS_KEY_ID>
+    secretAccessKey: <SECRET_ACCESS_KEY>
     endpoint: "https://s3.us-east-2.amazonaws.com"
     bucket: "storage-teamcity"
-    readonly: "false" #OPTIONAL, default is false
+    readonly: "false" #OPTIONAL, de fault is false
     region: "us-east-2" #OPTIONAL
