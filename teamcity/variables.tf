@@ -1,3 +1,14 @@
 variable cluster_name {}
 variable cluster_endpoint {}
 variable eks_certificate_authority {}
+variable teamcity_namespace {}
+variable access_key_id {}
+variable secret_access_key {}
+variable s3_bucket {}
+variable s3_endpoint {}
+variable region {}
+variable db_endpoint {}
+variable db_port {}
+variable db_name {}
+variable db_username {}
+variable db_password {}

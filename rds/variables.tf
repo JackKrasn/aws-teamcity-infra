@@ -25,3 +25,15 @@ variable "db_name" {}
 variable node_private_subnets {
   type = list(string)
 }
+
+variable "db_master_username" {}
+
+variable "db_master_password" {}
+
+variable "database_name" {
+  default = "teamcitydb"
+}
+
+variable "database_port" {
+  default = 3306
+}

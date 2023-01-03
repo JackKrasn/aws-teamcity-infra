@@ -29,8 +29,12 @@ variable "instance_class" {
 }
 
 variable "db_username" {
+  description = "db user for teamcitydb"
+  default     = "teamcity"
+}
+
+variable "db_master_password" {
   description = "db admin user"
-  default     = "root"
 }
 
 variable "db_password" {
@@ -55,5 +59,13 @@ variable "database_subnets" {
 }
 
 variable "region" {
-  default = "us-east-2"
+  default = "eu-west-2"
+}
+
+variable "access_key_id" {
+  description = "password, provide through your tfvars file"
+}
+
+variable "secret_access_key" {
+  description = "password, provide through your tfvars file"
 }

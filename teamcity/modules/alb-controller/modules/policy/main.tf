@@ -1,6 +1,6 @@
 resource "aws_iam_policy" "AWSLoadBalancerControllerIAMPolicy" {
   name   = "AWSLoadBalancerControllerIAMPolicy"
-  policy = file("teamcity/modules/alb-controller-policy/policies-json/alb_iam_policy.json")
+  policy = file("teamcity/modules/alb-controller/modules/policy/policies-json/alb_iam_policy.json")
 
 }
 

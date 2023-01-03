@@ -24,7 +24,7 @@ spec:
         - name: s3-storage
         {{- if .Values.server.persistentVolume.enabled }}
           persistentVolumeClaim:
-            claimName: s3-dataset
+            claimName: {{ .Values.pvc.server.name }}
         {{- else }}
           emptyDir: {}
         {{- end }}
@@ -54,7 +54,7 @@ spec:
               mountPath: /caches
               readOnly: false
           ports:
-            - name: {{ template "teamcity.name" . }}-http
+            - name: teamcity-http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
 {{- if .Values.server.readinessProbe.enabled }}

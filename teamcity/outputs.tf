@@ -1,3 +1,3 @@
 output "s3_bucket" {
-  value = aws_s3_bucket.storage-teamcity.bucket
+  value = module.teamcity-storage.s3_bucket
 }

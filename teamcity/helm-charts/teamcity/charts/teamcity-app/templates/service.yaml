@@ -17,8 +17,7 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - name: {{ template "teamcity.name" . }}-http
-      port: {{ .Values.service.port }}
+    - port: {{ .Values.service.por
       targetPort: {{ .Values.service.port }}
       protocol: TCP
   selector:

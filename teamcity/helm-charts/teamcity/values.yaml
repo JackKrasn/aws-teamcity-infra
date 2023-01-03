@@ -1,0 +1,53 @@
+global:
+  namespaceYaml: false
+
+teamcity-app:
+  fullnameOverride: teamcity
+  server:
+    replicaCount: 1
+    image:
+      pullPolicy: IfNotPresent
+      repository: jetbrains/teamcity-server
+      version: 2022.10.1
+    resources:
+      limits:
+        cpu: 800m
+        memory: 2048Mi
+      requests:
+        cpu: 600m
+        memory: 2048Mi
+    persistentVolume:
+      enabled: true
+    teamcityServerOpts: "-Dteamcity.caches.path=/caches"
+
+  agent:
+    replicaCount: 1
+    image:
+      repository: jetbrains/teamcity-agent
+      pullPolicy: IfNotPresent
+    resources:
+      limits:
+        cpu: 800m
+        memory: 968Mi
+      requests:
+        cpu: 600m
+        memory: 968Mi
+    persistentVolume:
+      enabled: false
+  pvc:
+    agent:
+      enabled: false
+      name:
+    server:
+      enabled: false
+      name: s3-dataset
+
+  dataset:
+    name: ""
+    aws:
+      accessKeyId: ""
+      secretAccessKeyId: ""
+      region: ""
+    s3:
+      endpoint: ""
+      bucket: ""

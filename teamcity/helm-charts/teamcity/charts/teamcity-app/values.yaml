@@ -116,14 +116,23 @@ pvc:
     enabled: false
     name: s3-dataset
 db:
-  endpoint: teamcity-db.c59tu0hvtcjh.us-east-2.rds.amazonaws.com:5432
-  name: teamcitydb
-  username: teamcity
-  password: teamcity
+  endpoint: "" # teamcity-db.c59tu0hvtcjh.us-east-2.rds.amazonaws.com:5432
+  name: "" #teamcitydb
+  username: "" # teamcity
+  password: "" #teamcity
   config: |
-    # Database: PostgreSQL
-    connectionUrl=jdbc:postgresql://{{ .Values.db.endpoint }}/{{ .Values.db.name }}
+    # Database: MySQL
+    connectionUrl=jdbc:mysql://{{ .Values.db.endpoint }}:{{ .Values.db.port }}/{{ .Values.db.name }}
     connectionProperties.user={{ .Values.db.username }}
     connectionProperties.password={{ .Values.db.password }}
     maxConnections=50
     testOnBorrow=false
+dataset:
+  aws:
+    accessKeyId: ""
+    secretAccessKeyId: ""
+    region: ""
+  s3:
+    endpoint: ""
+    bucket: ""
+  name: ""

@@ -1,0 +1,11 @@
+apiVersion: v2
+name: teamcity-chart
+description: A Helm chart for deployment TeamCity CI and CD server. Prepare namespace
+type: application
+version: 0.1.0
+appVersion: 0.1.0
+
+dependencies:
+  - name: teamcity-app
+    version: 0.1.0
+    condition: teamcity-app.enabled

@@ -65,9 +65,19 @@ output "cluster_iam_role_name" {
   value = module.eks-cluster.cluster_iam_role_name
 }
 
-output "db_instance_endpoint" {
+output "db_cluster_endpoint" {
   description = "The connection endpoint"
-  value       = module.rds.db_instance_endpoint
+  value       = module.rds.db_cluster_endpoint
+}
+
+output "db_cluster_port" {
+  description = "The cluster db port"
+  value       = module.rds.db_cluster_port
+}
+
+output "secret_arn" {
+  description = "The secret arn with db credentials"
+  value       = module.rds.secret_arn
 }
 
 output "db_username" {
