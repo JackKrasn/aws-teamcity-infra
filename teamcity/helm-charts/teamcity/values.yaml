@@ -18,7 +18,8 @@ teamcity-app:
         memory: 2048Mi
     persistentVolume:
       enabled: true
-    teamcityServerOpts: "-Dteamcity.caches.path=/caches"
+    teamcityServerOpts: "-Dteamcity.caches.path=/caches -Dsun.net.inetaddr.ttl=60"
+#
 
   agent:
     replicaCount: 1

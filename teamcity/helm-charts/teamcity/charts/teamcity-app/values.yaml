@@ -126,7 +126,10 @@ db:
     connectionProperties.user={{ .Values.db.username }}
     connectionProperties.password={{ .Values.db.password }}
     maxConnections=50
-    testOnBorrow=false
+    testOnBorrow=true
+    testOnReturn=true
+    timeBetweenEvictionRunsMillis=60000
+    validationQuery=select case when @@read_only + @@innodb_read_only \= 0 then 1 else (select table_name from information_schema.tables) end as `1`
 dataset:
   aws:
     accessKeyId: ""
