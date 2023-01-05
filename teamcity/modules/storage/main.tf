@@ -72,3 +72,9 @@ resource "helm_release" "dlf" {
   create_namespace = true
   atomic           = true
 }
+
+# create s3 bucket for artifact storage
+resource "aws_s3_bucket" "artifacts-storage" {
+  bucket = var.s3_artifacts_bucket
+  tags   = local.common_tags
+}

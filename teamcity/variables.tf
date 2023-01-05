@@ -4,8 +4,15 @@ variable eks_certificate_authority {}
 variable teamcity_namespace {}
 variable access_key_id {}
 variable secret_access_key {}
-variable s3_bucket {}
-variable s3_endpoint {}
+variable s3_bucket {
+  description = "Bucket for TeamCity Data Directory, used by the TeamCity server to store configuration, build results"
+}
+variable s3_endpoint {
+  description = "S3 endpoint"
+}
+variable s3_artifacts_bucket {
+  description = "Bucket for external artifacts storage"
+}
 variable region {}
 variable db_endpoint {}
 variable db_port {}

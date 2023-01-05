@@ -66,6 +66,7 @@ module "teamcity" {
   cluster_endpoint          = module.eks-cluster.cluster_endpoint
   eks_certificate_authority = module.eks-cluster.eks_certificate_authority
   s3_bucket                 = "teamcity-storage-bucket"
+  s3_artifacts_bucket       = "teamcity-art-bucket"
   s3_endpoint               = "https://s3.${var.region}.amazonaws.com"
   access_key_id             = var.access_key_id
   region                    = var.region

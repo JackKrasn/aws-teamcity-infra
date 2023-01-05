@@ -3,8 +3,9 @@ locals {
 }
 
 module "teamcity-storage" {
-  source = "./modules/storage"
-  s3_bucket = var.s3_bucket
+  source              = "./modules/storage"
+  s3_bucket           = var.s3_bucket
+  s3_artifacts_bucket = var.s3_artifacts_bucket
 }
 
 #install teamcity app
@@ -80,8 +81,8 @@ resource "helm_release" "teamcity" {
 }
 
 module "alb-controller" {
-  source = "./modules/alb-controller"
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name = var.cluster_name
+  source                    = "./modules/alb-controller"
+  cluster_endpoint          = var.cluster_endpoint
+  cluster_name              = var.cluster_name
   eks_certificate_authority = var.eks_certificate_authority
 }

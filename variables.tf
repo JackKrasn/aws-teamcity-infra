@@ -34,11 +34,11 @@ variable "db_username" {
 }
 
 variable "db_master_password" {
-  description = "db admin user"
+  description = "db master password, provide through your tfvars file"
 }
 
 variable "db_password" {
-  description = "password, provide through your tfvars file"
+  description = "teamcity db user password, provide through your tfvars file"
 }
 
 variable "db_name" {
@@ -59,6 +59,7 @@ variable "database_subnets" {
 }
 
 variable "region" {
+  description = "AWS region"
   default = "eu-west-2"
 }
 
