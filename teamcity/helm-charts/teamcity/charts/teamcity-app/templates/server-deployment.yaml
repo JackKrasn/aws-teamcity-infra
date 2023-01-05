@@ -14,6 +14,8 @@ spec:
     matchLabels:
       app: {{ template "teamcity.name" . }}
       release: {{ .Release.Name }}
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
