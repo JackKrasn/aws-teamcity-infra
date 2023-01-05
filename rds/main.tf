@@ -1,7 +1,3 @@
-#module "security_groups" {
-#  source = "./modules/security_groups"
-#  vpc_id = var.vpc_id
-#}
 resource "random_id" "id" {
   byte_length = 8
 }
@@ -20,33 +16,6 @@ resource "aws_security_group" "rds_sg" {
     cidr_blocks = var.node_private_subnets
   }
 }
-
-#resource "aws_db_instance" "this" {
-#  identifier        = var.identifier
-#  db_name           = var.db_name
-#  storage_type      = var.storage_type
-#  allocated_storage = var.allocated_storage
-#  engine            = var.db_engine
-#  engine_version    = var.engine_version
-#  instance_class    = var.instance_class
-#  username          = var.db_username
-#  password          = var.db_password
-#
-#  vpc_security_group_ids = [
-#    aws_security_group.rds_sg.id,
-#  ]
-#
-#  db_subnet_group_name                = var.db_subnet_group_name
-#  storage_encrypted                   = false
-#  skip_final_snapshot                 = true
-#  publicly_accessible                 = false
-#  multi_az                            = false
-#  iam_database_authentication_enabled = true
-#
-#  tags = {
-#    Name = "teamcity"
-#  }
-#}
 
 resource "aws_secretsmanager_secret" "db-pass" {
   name = "db-pass-${random_id.id.hex}"
@@ -108,8 +77,3 @@ resource "null_resource" "db_setup" {
 
   }
 }
-
-#resource "aws_iam_role_policy_attachment" "test-attach" {
-#  role       = "node-group-1-eks-node-group-20221223201052613000000009"
-#  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-#}
