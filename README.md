@@ -1,12 +1,16 @@
-# Amazon AWS EKS, RDS PostgreSQL, TeamCity, S3 Storage, ALB  with terraform
+# Amazon AWS EKS, Amazon Aurora MySQL Database, TeamCity, S3 Storage, ALB  with terraform
 
 Assuming you already have Amazon AWS account we will need additional binaries for AWS CLI, terraform, kubectl and aws-iam-authenticator.
 
-* Initial tooling setup aws cli , kubectl and terraform
+The document is structured in 7 parts:
+
+* Initial tooling setup aws cli, kubectl and terraform
 * Creating terraform IAM account with access keys and access policy
 * Creating back-end storage for tfstate file in AWS S3 
-* Creating Kubernetes cluster on AWS EKS and RDS on PostgreSQL
+* Creating Kubernetes cluster on AWS EKS, Amazon Aurora MySQL Database, TeamCity Server with Agents, S3 storage
 * Working with kubernetes "kubectl" in EKS
+* Setting Up TeamCity Server
+* Create a Test Project
 
 ## Initial tooling setup aws-cli, kubectl, terraform and aws-iam-authenticator
 
@@ -122,7 +126,7 @@ aws s3 mb s3://teamcity-state-bucket --region us-east-2
 aws s3api put-bucket-versioning --bucket teamcity-state-bucket --versioning-configuration Status=Enabled
 ```
 
-## Creating Kubernetes cluster on AWS EKS and RDS on PostgreSQL
+## Creating Kubernetes cluster on AWS EKS, Amazon Aurora MySQL Database, TeamCity Server with Agents, S3 storage
 
 Now we can move into creating new infrastructure, eks, rds, teamcity, s3 storage and TeamCity with terraform
 
@@ -132,8 +136,7 @@ Terraform modules will create
 
 * VPC
 * EKS cluster
-* RDS with PostgreSQL
-* Kubernetes Namespace for TeamCity Server ang Agents
+* Aurora Mysql Database
 * TeamCity Server and 2 TeamCity Agents
 * AWS Load Balancer Controller
 * S3 Storage (Persistent Storage for pods)
@@ -145,10 +148,20 @@ Terraform modules will create
 terraform init
 ```
 
-Before we can start will need to update variables and add db password to terraform.tfvars
+Before we can start will need to update variables and add
+
+- db password for teamcity db
+- db master password for MySql Db Cluster
+- AWS Access Key ID for access s3 storage
+- AWS Access Key for access s3 storage
+
+to terraform.tfvars
 
 ```sh
-echo 'db_password = "Your_DB_Passwd."' >> terraform.tfvars
+echo 'db_password="Your_DB_Passwd."' >> terraform.tfvars
+echo 'db_master_password="Your_DB_Master_Passsword"' >> terraform.tfvars
+echo 'access_key_id="Your_AWS_Access_KEY_ID' >> terraform.tfvars
+echo 'secret_access_key="Your_AWS_Access_KEY"' >> terraform.tfvars
 ```
 
 #### It's a good idea to sync terraform modules
@@ -171,16 +184,76 @@ terraform plan
 terraform apply
 ```
 
+## Working with kubernetes "kubectl" in EKS
+
 Run the following command to retrieve the access credentials for your cluster and configure kubectl.
+
+### Update kubeconfig
 
 ```sh
  aws eks --region $(terraform output -raw region) update-kubeconfig \
     --name $(terraform output -raw cluster_name)
 ```
 
-#### Set Up RDS PostgreSQL for TeamcityServer
+## Setting Up TeamCity Server
 
-TODO:not forget
+### Get http url for teamcity server
+
 ```sh
-
+kubectl get ingress/teamcity -n teamcity -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
 ```
+
+> NOTE: In my case, the above command returned k8s-teamcity-teamcity-875118e19c-485437057.eu-west-2.elb.amazonaws.com
+
+### Setting Up TeamCity
+
+Open the browser and enter the url http://k8s-teamcity-teamcity-875118e19c-485437057.eu-west-2.elb.amazonaws.com
+
+![License Agreement](docs/images/license_agreement_1.png)
+
+Scroll down, select "Accept License Agreement" and click continue:
+
+![License Agreement_2](docs/images/license_agreement_2.png)
+
+Set username and password for administrator:
+
+![User and Password](docs/images/username_and_password.png)
+
+That’s it! We should now be able to see the TeamCity GUI:
+
+![Gui](docs/images/gui.png)
+
+Click "Agents" 
+
+![Agents](docs/images/agents.png)
+
+And then click "Authorize"
+
+![Agents authorize](docs/images/agents_authorize.png)
+
+Write any comment and click the button
+
+![Agents authorize comments](docs/images/agents_authorize_comments.png)
+
+That’s it! We should now be able to see the available agent
+
+![Agent in pool](docs/images/default_agent_in_pool.png)
+
+> NOTE: If the pod is restarted you will have to authorize the agent again 
+
+You can also connect agents using the [Kubernetes Support](https://plugins.jetbrains.com/plugin/9818-kubernetes-support?_ga=2.250338374.1973796019.1672818115-2146771399.1670918581&_gl=1*lol6m4*_ga*MjE0Njc3MTM5OS4xNjcwOTE4NTgx*_ga_9J976DJZ68*MTY3MzAwNDQ0MS4xOC4xLjE2NzMwMDQ0NDYuMC4wLjA.) plugin
+
+The plugin will automatically deploy agents in the Kubernetes namespace and add them to the pool. 
+If there is no activity, the plugin will stop idle agents.
+
+### Setting Up for Kubernetes
+
+To establish the integration with Kubernetes, you need to create a dedicated cloud profile in TeamCity. Open the settings of the required project and, under the Cloud Profiles section, click Create new profile.
+
+My Cloud Profile
+
+![Cloud profile](docs/images/cloud_profile.png)
+
+## Create Test Project
+
+Let's create [Test Project](https://github.com/JackKrasn/teamcity-hello-project)  with Kotlin DSL.

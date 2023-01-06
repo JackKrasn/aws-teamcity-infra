@@ -9,7 +9,7 @@ resource "aws_security_group" "rds_sg" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "PostgreSQL from Database Subnet"
+    description = "Access for Db "
     from_port   = var.database_port
     to_port     = var.database_port
     protocol    = "tcp"
