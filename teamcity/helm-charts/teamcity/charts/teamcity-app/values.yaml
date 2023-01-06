@@ -121,7 +121,7 @@ db:
   username: "" # teamcity
   password: "" #teamcity
   config: |
-    # Database: MySQL
+    # Database: MySQL https://www.jetbrains.com/help/teamcity/using-aws-aurora-database-cluster.html
     connectionUrl=jdbc:mysql://{{ .Values.db.endpoint }}:{{ .Values.db.port }}/{{ .Values.db.name }}
     connectionProperties.user={{ .Values.db.username }}
     connectionProperties.password={{ .Values.db.password }}

@@ -22,7 +22,7 @@ teamcity-app:
 #
 
   agent:
-    replicaCount: 1
+    replicaCount: 2
     image:
       repository: jetbrains/teamcity-agent
       pullPolicy: IfNotPresent
