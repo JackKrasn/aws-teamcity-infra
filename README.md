@@ -180,6 +180,15 @@ terraform plan
 
 > NOTE: building complete infrastructure may take more than 10 minutes.
 
+Create infrastructure(EKS and RDS)
+
+```sh
+terraform apply -var deploy_teamcity=false
+```
+
+Then deploy TeamCity application
+
+
 ```sh
 terraform apply
 ```

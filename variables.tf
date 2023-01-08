@@ -70,3 +70,7 @@ variable "access_key_id" {
 variable "secret_access_key" {
   description = "password, provide through your tfvars file"
 }
+
+variable "deploy_teamcity" {
+  default = true
+}

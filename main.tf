@@ -61,6 +61,7 @@ module "rds" {
 }
 
 module "teamcity" {
+  count = var.deploy_teamcity ? 1 : 0
   source                    = "./teamcity"
   cluster_name              = module.eks-cluster.cluster_name
   cluster_endpoint          = module.eks-cluster.cluster_endpoint
