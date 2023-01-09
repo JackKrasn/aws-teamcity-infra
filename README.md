@@ -179,9 +179,24 @@ terraform plan
 ### Apply terraform plan
 
 > NOTE: building complete infrastructure may take more than 10 minutes.
+> First you need to create an eks cluster
+
+Create infrastructure(EKS and RDS)
 
 ```sh
-terraform apply
+terraform apply -var deploy_teamcity=false -var deploy_alb=false
+```
+
+Then deploy TeamCity 
+
+```sh
+terraform apply -var deploy_teamcity=true -var deploy_alb=false
+```
+
+Then deploy application load balancer
+
+```sh
+terraform apply -var deploy_teamcity=true -var deploy_alb=true
 ```
 
 ## Working with kubernetes "kubectl" in EKS

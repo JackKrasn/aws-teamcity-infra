@@ -19,3 +19,4 @@ variable db_port {}
 variable db_name {}
 variable db_username {}
 variable db_password {}
+variable deploy_alb {}
