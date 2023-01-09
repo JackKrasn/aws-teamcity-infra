@@ -65,12 +65,24 @@ module "s3-storage-users" {
   ]
 }
 
+resource "kubernetes_namespace" "dlf" {
+  metadata {
+    labels = {
+      "app.kubernetes.io/name" = "dlf"
+    }
+    name = "dlf"
+  }
+}
+
 resource "helm_release" "dlf" {
   name             = "dlf"
   chart            = "teamcity/modules/storage/helm-charts/dlf"
   namespace        = "dlf"
-  create_namespace = true
+  create_namespace = false
   atomic           = true
+  wait             = false
+
+  depends_on = [kubernetes_namespace.dlf, aws_s3_bucket.artifacts-storage]
 }
 
 # create s3 bucket for artifact storage

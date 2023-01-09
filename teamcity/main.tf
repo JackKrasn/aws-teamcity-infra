@@ -81,6 +81,7 @@ resource "helm_release" "teamcity" {
 }
 
 module "alb-controller" {
+  count                     = var.deploy_alb ? 1 : 0
   source                    = "./modules/alb-controller"
   cluster_endpoint          = var.cluster_endpoint
   cluster_name              = var.cluster_name

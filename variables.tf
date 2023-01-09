@@ -60,7 +60,7 @@ variable "database_subnets" {
 
 variable "region" {
   description = "AWS region"
-  default = "eu-west-2"
+  default     = "eu-west-2"
 }
 
 variable "access_key_id" {
@@ -72,5 +72,11 @@ variable "secret_access_key" {
 }
 
 variable "deploy_teamcity" {
-  default = true
+  description = "deploy teamcity"
+  default     = true
+}
+
+variable "deploy_alb" {
+  description = "create application load balancer"
+  default     = true
 }
