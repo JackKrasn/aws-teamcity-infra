@@ -40,7 +40,7 @@ resource "helm_release" "teamcity" {
     value = var.db_password
   }
 
-  depends_on = [module.elb]
+  depends_on = [module.ebs]
 }
 
 module "alb-controller" {
@@ -51,8 +51,8 @@ module "alb-controller" {
   eks_certificate_authority = var.eks_certificate_authority
 }
 
-module "elb" {
-  source = "./modules/elb"
+module "ebs" {
+  source = "modules/ebs"
   node_group_1_role = var.node_group_1_role
   node_group_2_role = var.node_group_2_role
 }
