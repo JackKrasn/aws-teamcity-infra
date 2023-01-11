@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "teamcity.fullname" . }}
+  labels:
+    app: {{ template "teamcity.name" . }}
+    version: {{ .Values.server.image.version }}
+    chart: {{ template "teamcity.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.server.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "teamcity.name" . }}
+      release: {{ .Release.Name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "teamcity.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      volumes:
+        - name: elb-storage
+        {{- if .Values.pvc.server.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.pvc.server.claimName }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
+        - name: caches
+          emptyDir: {}
+        - name: config
+          secret:
+            secretName: {{ template "teamcity.serverSecret" . }}
+            defaultMode: 0777
+      containers:
+        - name: {{ template "teamcity.fullname" . }}
+          image: {{ .Values.server.image.repository }}:{{ default "latest" .Values.server.image.version }}
+          imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+          env:
+            - name: TEAMCITY_SERVER_OPTS
+              value: {{ .Values.server.teamcityServerOpts }}
+          volumeMounts:
+            - name: elb-storage
+              mountPath: /data/teamcity_server/datadir
+              readOnly: false
+              subPath: datadir
+            - name: config
+              mountPath: /data/teamcity_server/datadir/config/database.properties
+              subPath: database.properties
+              readOnly: false
+            - name: caches
+              mountPath: /caches
+              readOnly: false
+          ports:
+            - name: teamcity-http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+{{- if .Values.server.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.server.readinessProbe.path }}
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: {{ .Values.server.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.server.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.server.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.server.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.server.readinessProbe.successThreshold }}
+{{- end }}
+{{- if .Values.server.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.server.livenessProbe.path }}
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: {{ .Values.server.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.server.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.server.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.server.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.server.livenessProbe.successThreshold }}
+{{- end }}
+          resources:
+{{  toYaml .Values.server.resources | indent 12 }}
+      securityContext:
+        fsGroup: 1000
+{{- with .Values.server.nodeSelector }}
+      nodeSelector:
+{{    toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.server.affinity }}
+      affinity:
+{{    toYaml . | indent 8 }}
+{{- end }}
+{{- with .Values.server.tolerations }}
+      tolerations:
+{{    toYaml . | indent 8 }}
+{{- end }}

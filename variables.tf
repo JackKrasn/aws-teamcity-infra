@@ -63,14 +63,6 @@ variable "region" {
   default     = "eu-west-2"
 }
 
-variable "access_key_id" {
-  description = "password, provide through your tfvars file"
-}
-
-variable "secret_access_key" {
-  description = "password, provide through your tfvars file"
-}
-
 variable "deploy_teamcity" {
   description = "deploy teamcity"
   default     = true

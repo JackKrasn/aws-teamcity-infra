@@ -66,12 +66,7 @@ module "teamcity" {
   cluster_name              = module.eks-cluster.cluster_name
   cluster_endpoint          = module.eks-cluster.cluster_endpoint
   eks_certificate_authority = module.eks-cluster.eks_certificate_authority
-  s3_bucket                 = "teamcity-storage-bucket"
   s3_artifacts_bucket       = "teamcity-art-bucket"
-  s3_endpoint               = "https://s3.${var.region}.amazonaws.com"
-  access_key_id             = var.access_key_id
-  region                    = var.region
-  secret_access_key         = var.secret_access_key
   teamcity_namespace        = "teamcity"
   db_endpoint               = module.rds.db_cluster_endpoint
   db_name                   = var.db_name
@@ -79,4 +74,6 @@ module "teamcity" {
   db_port                   = module.rds.db_cluster_port
   db_username               = var.db_username
   deploy_alb                = var.deploy_alb
+  node_group_1_role         = module.eks-cluster.eks_managed_node_groups["one"]["iam_role_name"]
+  node_group_2_role         = module.eks-cluster.eks_managed_node_groups["two"]["iam_role_name"]
 }

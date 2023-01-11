@@ -2,10 +2,9 @@ locals {
   dataset_name = "s3-dataset"
 }
 
-module "teamcity-storage" {
-  source              = "./modules/storage"
-  s3_bucket           = var.s3_bucket
-  s3_artifacts_bucket = var.s3_artifacts_bucket
+#s3-storage for artifacts
+resource "aws_s3_bucket" "artifacts-storage" {
+  bucket = var.s3_artifacts_bucket
 }
 
 #install teamcity app
@@ -17,67 +16,31 @@ resource "helm_release" "teamcity" {
   atomic           = true
 
   set {
-    name  = "teamcity-app.db.endpoint"
+    name  = "db.endpoint"
     value = var.db_endpoint
   }
 
   set {
-    name  = "teamcity-app.db.port"
+    name  = "db.port"
     value = var.db_port
   }
 
   set {
-    name  = "teamcity-app.db.name"
+    name  = "db.name"
     value = var.db_name
   }
 
   set {
-    name  = "teamcity-app.db.username"
+    name  = "db.username"
     value = var.db_username
   }
 
   set {
-    name  = "teamcity-app.db.password"
+    name  = "db.password"
     value = var.db_password
   }
 
-
-  set {
-    name  = "teamcity-app.dataset.name"
-    value = local.dataset_name
-  }
-
-  set {
-    name  = "teamcity-app.dataset.aws.accessKeyId"
-    value = var.access_key_id
-  }
-
-  set {
-    name  = "teamcity-app.dataset.aws.secretAccessKeyId"
-    value = var.secret_access_key
-  }
-
-  set {
-    name  = "teamcity-app.dataset.s3.endpoint"
-    value = var.s3_endpoint
-  }
-
-  set {
-    name  = "teamcity-app.dataset.s3.bucket"
-    value = var.s3_bucket
-  }
-
-  set {
-    name  = "teamcity-app.dataset.aws.region"
-    value = var.region
-  }
-
-  set {
-    name  = "teamcity-app.pvc.server.name"
-    value = local.dataset_name
-  }
-
-  depends_on = [module.teamcity-storage]
+  depends_on = [module.elb]
 }
 
 module "alb-controller" {
@@ -86,4 +49,10 @@ module "alb-controller" {
   cluster_endpoint          = var.cluster_endpoint
   cluster_name              = var.cluster_name
   eks_certificate_authority = var.eks_certificate_authority
+}
+
+module "elb" {
+  source = "./modules/elb"
+  node_group_1_role = var.node_group_1_role
+  node_group_2_role = var.node_group_2_role
 }
