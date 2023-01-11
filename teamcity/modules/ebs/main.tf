@@ -40,7 +40,7 @@ resource "aws_iam_role_policy_attachment" "worknode2-AmazonEBSCSIDriver" {
 
 resource "helm_release" "aws-ebs-csi-driver" {
   name             = "aws-ebs-csi-driver"
-  chart            = "teamcity/modules/elb/helm-charts/aws-ebs-csi-driver"
+  chart            = "teamcity/modules/ebs/helm-charts/aws-ebs-csi-driver"
   namespace        = "kube-system"
   create_namespace = false
   atomic           = true
