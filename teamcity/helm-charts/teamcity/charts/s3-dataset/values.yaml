@@ -1,9 +1,0 @@
-aws:
-  acceesKeyId: ""
-  secretAccessKeyId: ""
-  region: ""
-s3:
-  endpoint: ""
-  bucket: ""
-dataset:
-  name: ""

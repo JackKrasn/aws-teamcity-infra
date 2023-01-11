@@ -140,7 +140,7 @@ Terraform modules will create
 * TeamCity Server and 2 TeamCity Agents
 * AWS Load Balancer Controller
 * S3 Storage (Persistent Storage for pods)
-* [Dataset Operator](https://github.com/datashim-io/datashim)
+* Amazon CSI EBS Driver
 
 #### Initialize and pull terraform cloud specific dependencies
 
@@ -152,16 +152,12 @@ Before we can start will need to update variables and add
 
 - db password for teamcity db
 - db master password for MySql Db Cluster
-- AWS Access Key ID for access s3 storage
-- AWS Access Key for access s3 storage
 
 to terraform.tfvars
 
 ```sh
 echo 'db_password="Your_DB_Passwd."' >> terraform.tfvars
 echo 'db_master_password="Your_DB_Master_Passsword"' >> terraform.tfvars
-echo 'access_key_id="Your_AWS_Access_KEY_ID' >> terraform.tfvars
-echo 'secret_access_key="Your_AWS_Access_KEY"' >> terraform.tfvars
 ```
 
 #### It's a good idea to sync terraform modules
