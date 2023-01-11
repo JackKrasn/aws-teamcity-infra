@@ -52,7 +52,7 @@ module "alb-controller" {
 }
 
 module "ebs" {
-  source = "modules/ebs"
+  source = "./modules/ebs"
   node_group_1_role = var.node_group_1_role
   node_group_2_role = var.node_group_2_role
 }
