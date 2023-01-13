@@ -74,6 +74,5 @@ module "teamcity" {
   db_port                   = module.rds.db_cluster_port
   db_username               = var.db_username
   deploy_alb                = var.deploy_alb
-  node_group_1_role         = module.eks-cluster.eks_managed_node_groups["one"]["iam_role_name"]
-  node_group_2_role         = module.eks-cluster.eks_managed_node_groups["two"]["iam_role_name"]
+  eks_managed_node_groups   = module.eks-cluster.eks_managed_node_groups
 }

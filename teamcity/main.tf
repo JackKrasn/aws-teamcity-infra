@@ -53,6 +53,6 @@ module "alb-controller" {
 
 module "ebs" {
   source = "./modules/ebs"
-  node_group_1_role = var.node_group_1_role
-  node_group_2_role = var.node_group_2_role
+  node_group_1_role = var.eks_managed_node_groups["one"]["iam_role_name"]
+  node_group_2_role = var.eks_managed_node_groups["two"]["iam_role_name"]
 }

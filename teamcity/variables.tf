@@ -11,5 +11,4 @@ variable db_name {}
 variable db_username {}
 variable db_password {}
 variable deploy_alb {}
-variable node_group_1_role {}
-variable node_group_2_role {}
+variable eks_managed_node_groups {}
