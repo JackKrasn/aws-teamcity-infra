@@ -75,3 +75,8 @@ output "cluster_oidc_issuer_url" {
   description = "The URL on the EKS cluster for the OpenID Connect identity provider"
   value       = module.eks.cluster_oidc_issuer_url
 }
+
+output "eks_managed_node_groups" {
+  description = "Map of attribute maps for all EKS managed node groups created"
+  value       = module.eks.eks_managed_node_groups
+}
