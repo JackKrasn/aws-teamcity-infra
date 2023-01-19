@@ -206,12 +206,32 @@ Run the following command to retrieve the access credentials for your cluster an
     --name $(terraform output -raw cluster_name)
 ```
 
+### Restart teamcity pod
+
+```sh
+kubectl delete pod $(kubectl get pods -n teamcity --no-headers -o custom-columns=":metadata.name" \
+ | sed -n '/teamcity-[^agent]/p') -n teamcity
+```
+
+### Show pod logs
+```sh
+kubectl logs -f $(kubectl get pods -n teamcity --no-headers -o custom-columns=":metadata.name" \
+ | sed -n '/teamcity-[^agent]/p') -n teamcity
+```
+
+> NOTE: Wait for the following messages in the pod logs
+> ```text
+> [TeamCity] Super user authentication token: 1574860418377163666 (use empty username with the token as the password to access the server)
+> [2023-01-19 19:46:27,664]   WARN [@52b663a4'; Normal executor 11] -    jetbrains.buildServer.AGENT - Agent "ip-10-0-3-41" {id=1} is unauthorized on registration
+> [2023-01-19 19:46:28,462]   WARN [@424bc371'; Normal executor 12] -    jetbrains.buildServer.AGENT - Agent "ip-10-0-2-72" {id=2} is unauthorized on registration
+> ```
+
 ## Setting Up TeamCity Server
 
 ### Get http url for teamcity server
 
 ```sh
-kubectl get ingress/teamcity -n teamcity -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+echo "http://$(kubectl get ingress/teamcity -n teamcity -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')"
 ```
 
 > NOTE: In my case, the above command returned k8s-teamcity-teamcity-875118e19c-485437057.eu-west-2.elb.amazonaws.com
