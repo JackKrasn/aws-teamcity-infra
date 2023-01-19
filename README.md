@@ -169,7 +169,7 @@ terraform get -update
 ### View terraform plan
 
 ```sh
-terraform plan
+terraform plan -var deploy_teamcity=false -var deploy_alb=false
 ```
 
 ### Apply terraform plan
