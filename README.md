@@ -174,25 +174,10 @@ terraform plan -var deploy_teamcity=false -var deploy_alb=false
 
 ### Apply terraform plan
 
-> NOTE: building complete infrastructure may take more than 10 minutes.
-> First you need to create an eks cluster
-
-Create infrastructure(EKS and RDS)
+> NOTE: building complete infrastructure may take more than 15 minutes.
 
 ```sh
-terraform apply -var deploy_teamcity=false -var deploy_alb=false
-```
-
-Then deploy TeamCity 
-
-```sh
-terraform apply -var deploy_teamcity=true -var deploy_alb=false
-```
-
-Then deploy application load balancer
-
-```sh
-terraform apply -var deploy_teamcity=true -var deploy_alb=true
+terraform apply
 ```
 
 ## Working with kubernetes "kubectl" in EKS
@@ -204,13 +189,6 @@ Run the following command to retrieve the access credentials for your cluster an
 ```sh
  aws eks --region $(terraform output -raw region) update-kubeconfig \
     --name $(terraform output -raw cluster_name)
-```
-
-### Restart teamcity pod
-
-```sh
-kubectl delete pod $(kubectl get pods -n teamcity --no-headers -o custom-columns=":metadata.name" \
- | sed -n '/teamcity-[^agent]/p') -n teamcity
 ```
 
 ### Show pod logs

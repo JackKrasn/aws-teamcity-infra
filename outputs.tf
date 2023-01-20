@@ -104,7 +104,7 @@ output "cluster_oidc_issuer_url" {
   value       = module.eks-cluster.cluster_oidc_issuer_url
 }
 
-#output "eks_managed_node_groups" {
-#  description = "Map of attribute maps for all EKS managed node groups created"
-#  value       = module.eks-cluster.eks_managed_node_groups
-#}
+output "teamcity_release_name" {
+  description = "The TeamCity release name"
+  value = module.teamcity.release_name
+}

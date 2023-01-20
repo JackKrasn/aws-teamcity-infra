@@ -13,7 +13,8 @@ resource "helm_release" "teamcity" {
   chart            = "teamcity/helm-charts/teamcity"
   namespace        = var.teamcity_namespace
   create_namespace = true
-  atomic           = true
+  atomic           = false
+  timeout = 600
 
   set {
     name  = "db.endpoint"
@@ -41,14 +42,6 @@ resource "helm_release" "teamcity" {
   }
 
   depends_on = [module.ebs]
-}
-
-module "alb-controller" {
-  count                     = var.deploy_alb ? 1 : 0
-  source                    = "./modules/alb-controller"
-  cluster_endpoint          = var.cluster_endpoint
-  cluster_name              = var.cluster_name
-  eks_certificate_authority = var.eks_certificate_authority
 }
 
 module "ebs" {

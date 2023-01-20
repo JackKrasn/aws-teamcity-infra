@@ -17,6 +17,21 @@ provider "kubernetes" {
   }
 }
 
+#provider "kubectl" {
+#  host                   = module.eks-cluster.cluster_endpoint
+#  cluster_ca_certificate = base64decode(module.eks-cluster.eks_certificate_authority)
+#  exec {
+#    api_version = "client.authentication.k8s.io/v1beta1"
+#    command     = "aws"
+#    args        = [
+#      "eks",
+#      "get-token",
+#      "--cluster-name",
+#      module.eks-cluster.cluster_name
+#    ]
+#  }
+#}
+
 provider "helm" {
   kubernetes {
     host                   = module.eks-cluster.cluster_endpoint
@@ -61,7 +76,6 @@ module "rds" {
 }
 
 module "teamcity" {
-  count                     = var.deploy_teamcity ? 1 : 0
   source                    = "./teamcity"
   cluster_name              = module.eks-cluster.cluster_name
   cluster_endpoint          = module.eks-cluster.cluster_endpoint
@@ -73,6 +87,14 @@ module "teamcity" {
   db_password               = var.db_password
   db_port                   = module.rds.db_cluster_port
   db_username               = var.db_username
-  deploy_alb                = var.deploy_alb
   eks_managed_node_groups   = module.eks-cluster.eks_managed_node_groups
+}
+
+module "alb-controller" {
+  source                    = "./alb-controller"
+  cluster_endpoint          = module.eks-cluster.cluster_endpoint
+  cluster_name              = module.eks-cluster.cluster_name
+  eks_certificate_authority = module.eks-cluster.eks_certificate_authority
+  teamcity_release_name     = module.teamcity.release_name
+  cluster_oidc_url          = module.eks-cluster.cluster_oidc_issuer_url
 }
