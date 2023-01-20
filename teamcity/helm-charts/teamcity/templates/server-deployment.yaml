@@ -36,6 +36,14 @@ spec:
           secret:
             secretName: {{ template "teamcity.serverSecret" . }}
             defaultMode: 0777
+      initContainers:
+        - name: prepare
+          image: {{ .Values.server.image.repository }}:{{ default "latest" .Values.server.image.version }}
+          command: [ 'sh', '-c', "[ ! -d /data/teamcity_server/datadir/config ] && mkdir /data/teamcity_server/datadir/config" ]
+          volumeMounts:
+            - name: elb-storage
+              mountPath: /data/teamcity_server/datadir
+              readOnly: false
       containers:
         - name: {{ template "teamcity.fullname" . }}
           image: {{ .Values.server.image.repository }}:{{ default "latest" .Values.server.image.version }}
@@ -47,7 +55,6 @@ spec:
             - name: elb-storage
               mountPath: /data/teamcity_server/datadir
               readOnly: false
-              subPath: datadir
             - name: config
               mountPath: /data/teamcity_server/datadir/config/database.properties
               subPath: database.properties

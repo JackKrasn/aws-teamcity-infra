@@ -63,7 +63,7 @@ server:
   # Application liveness probe settings
   livenessProbe:
     enabled: true
-    path: /js/polyfills.js
+    path: /login.html
     initialDelaySeconds: 180
     failureThreshold: 10
     timeoutSeconds: 10
@@ -72,7 +72,7 @@ server:
   # Application readiness probe settings
   readinessProbe:
     enabled: true
-    path: /js/polyfills.js
+    path: /login.html
     initialDelaySeconds: 60
     failureThreshold: 10
     timeoutSeconds: 10

@@ -62,13 +62,3 @@ variable "region" {
   description = "AWS region"
   default     = "eu-west-2"
 }
-
-variable "deploy_teamcity" {
-  description = "deploy teamcity"
-  default     = true
-}
-
-variable "deploy_alb" {
-  description = "create application load balancer"
-  default     = true
-}
